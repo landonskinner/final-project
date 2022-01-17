@@ -2,12 +2,12 @@ class UsersController < ApplicationController
 
     def index
         users = User.all
-        render json: users
+        render json: users, include: ['profile', 'profile.photos']
     end
 
     def show
         user = User.find(params[:id])
-        render json: user
+        render json: user, include: ['profile', 'profile.photos']
     end
 
     def create
@@ -16,7 +16,7 @@ class UsersController < ApplicationController
     end
 
     def destroy
-        user = User.find(params[:id])
+        user = User.find(id: params[:id])
         user.destroy
         head :no_content
     end

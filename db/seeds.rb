@@ -7,9 +7,12 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 u1 = User.create(name: "landon", email: "landon@gmail.com", password: "123456")
-u2 = User.create(name: "luke", email: "luke@gmail.com", password: "123456")
+u2 = User.create(name: "bentley", email: "bentley@gmail.com", password: "123456")
 
-m1 = Match.create(user_1: u1, user_1_liked: true, user_2: u2, user_2_liked: false, matched: false)
+l1 = Like.create(liker: u1, liked: u2, matched: true)
+l2 = Like.create(liker: u2, liked: u1, matched: true)
+
+m1 = Match.create(matcher: l1, matchee: l2)
 
 c1 = Conversation.create(match: m1)
 
