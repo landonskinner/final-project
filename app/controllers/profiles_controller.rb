@@ -6,7 +6,7 @@ class ProfilesController < ApplicationController
     end
 
     def show
-        profile = Profile.find(params[:id])
+        profile = Profile.find_by!(user_id: params[:id])
         render json: profile
     end
 
@@ -16,7 +16,7 @@ class ProfilesController < ApplicationController
     end
 
     def update
-        profile = Profile.find(params[:id])
+        profile = Profile.find_by!(user_id: params[:id])
         profile.update(profile_params)
         render json: profile
     end
@@ -30,7 +30,7 @@ class ProfilesController < ApplicationController
     private
 
     def profile_params
-        params.permit(:user_id, :bio, :age, :size, :location, :personality)
+        params.permit(:user_id, :bio, :age, :size, :location, :personality, :lat, :lng)
     end
 
 end

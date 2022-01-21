@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@mui/icons-material": "^5.2.5",
-    "@mui/material": "^5.2.8"
+    "@mui/material": "^5.2.8",
+    "react-chat-engine": "^1.11.22"
   }
 }

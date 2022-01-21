@@ -1,21 +1,27 @@
 import React, {useEffect, useState} from 'react'
 import ProfileCard from './ProfileCard'
 
-function SwipeContainer({userId}) {
+function SwipeContainer({userId, matchUpdate, setMatchUpdate, createMatchChat, addUser, loggedInUser, setRefresh}) {
 
-    const [userStack, setUserStack] = useState([])
+    const [userStack, setUserStack] = useState('')
 
     useEffect(() => {
         fetch('/users')
         .then(resp => resp.json())
         .then(users => setUserStack(users))
-    }, [])
-
-    const renderUserStack = userStack.map((user) => <ProfileCard key={user.id} user={user} userId={userId} />)
-
+    }, [userId])
+    console.log(userStack)
+    const renderUserStack = () => {
+        if (!userStack) {
+            return null
+        } else {
+            return userStack.map((user) => <ProfileCard key={user.id} setRefresh={setRefresh} loggedInUser={loggedInUser} user={user} userId={userId} matchUpdate={matchUpdate} setMatchUpdate={setMatchUpdate} createMatchChat={createMatchChat} addUser={addUser}/>)
+        }
+    }
+    
     return (
         <div>
-            {renderUserStack}
+            {renderUserStack()}
         </div>
     )
 }

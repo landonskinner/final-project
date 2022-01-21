@@ -29,7 +29,8 @@ function MinProfileCard({match, userId}) {
             </div>
             :
             <div onClick={() => setExpandProfile(true)}>
-                <img src={matchProfile.profile.photos[0].image} alt={matchProfile.name} />
+                {/* redo conditional logic below for default img */}
+                {/* <img src={!!matchProfile.profile ? matchProfile.profile.photos[0].image : ''} alt={matchProfile.name} /> */}
                 <div>{matchProfile.name}</div>
             </div>
         }

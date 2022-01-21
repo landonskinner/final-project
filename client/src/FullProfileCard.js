@@ -1,16 +1,15 @@
 import React from 'react'
 
 function FullProfileCard({match}) {
-    
-    console.log(match)
 
-    const profilePhotos = match.profile.photos
-    const renderPhotos = profilePhotos.map(photo => <img src={photo.image} />)
+    // const profilePhotos = match.profile.photos
+    // const renderPhotos = profilePhotos.map(photo => <img src={photo.image} />)
+    
 
     return (
         <div>
             <div className="profile-photos">
-                {renderPhotos}
+                {/* {renderPhotos} */}
             </div>
             <div className="profile-info">
                 <h1>{match.name}</h1>
