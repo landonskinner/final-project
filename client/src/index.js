@@ -5,15 +5,31 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { ChatEngineWrapper } from 'react-chat-engine';
+import { createTheme, ThemeProvider } from '@mui/material/styles'
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#E68282',
+    },
+    secondary: {
+      main: '#11cb5f',
+    },
+  },
+});
 
 ReactDOM.render(
-  <ChatEngineWrapper>
+  
     <React.StrictMode>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+      <ChatEngineWrapper>
+        <ThemeProvider theme={theme} >
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </ThemeProvider>
+      </ChatEngineWrapper>
     </React.StrictMode>
-  </ChatEngineWrapper>,
+  ,
   document.getElementById('root')
 );
 

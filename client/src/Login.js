@@ -3,9 +3,15 @@ import LoginForm from "./LoginForm";
 import SignUpForm from "./SignUpForm";
 import axios from "axios";
 import {useLoadScript} from '@react-google-maps/api';
+import Paper from "@mui/material/Paper";
+import Button from "@mui/material/Button";
+import Divider from "@mui/material/Divider";
+import Chip from "@mui/material/Chip";
+import PetsIcon from '@mui/icons-material/Pets';
+import styled from 'styled-components'
 // import Header from "./Header";
 
-function Login({ onLogin, setDistances, user, setAuthCreds }) {
+function Login({ onLogin, setDistances, user, setAuthCreds, getLocation }) {
   const [showLogin, setShowLogin] = useState(true);
   
 
@@ -22,7 +28,7 @@ function Login({ onLogin, setDistances, user, setAuthCreds }) {
        axios.get('https://api.chatengine.io/chats', {headers: authObject})
       //  setAuthCreds({
       //    'username': email,
-      //    'password':
+      //    'password': password
       //  })
       sessionStorage.setItem('username', email);
       sessionStorage.setItem('password', password)
@@ -35,62 +41,86 @@ function Login({ onLogin, setDistances, user, setAuthCreds }) {
 
   const libraries = ["places"]
 
-  const {isLoaded, loadError} =  useLoadScript({
-    // googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
-    googleMapsApiKey: 'AIzaSyBhDtGcEOvImN19q4Zvye6G9O1VIkrkn5g',
-    libraries
-  })
+  // const {isLoaded, loadError} =  useLoadScript({
+  //   // googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
+  //   googleMapsApiKey: 'AIzaSyBhDtGcEOvImN19q4Zvye6G9O1VIkrkn5g',
+  //   libraries
+  // })
 
-  const getLocation = (userId) => {
-    navigator.geolocation.getCurrentPosition((position) => {
-      fetch(`/profiles/${userId}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            lat: position.coords.latitude,
-            lng: position.coords.longitude
-        })
-      })
-      .then(resp => resp.json())
-      .then(data => {
-        console.log(data)
-      })
-    }, () => null)
-  }
+  
 
 
   return (
-    <>
-      <h1>Log In</h1>
-      {showLogin ? (
-        <>
-          <LoginForm onLogin={onLogin} chatEngineAuth={chatEngineAuth} getLocation={getLocation} />
-          <p>
-            <div className="account-create">
-            Don't have an account? &nbsp;
+    <LoginStyle style={{backgroundColor: '#E68282', height: '100vh'}}>
+      <div className="login">
+        <Paper elevation={4} variant="outlined">
+        {showLogin ? (
+          <>
+            <h1><PetsIcon sx={{fontSize: 50}}/> Login</h1>
+            <LoginForm onLogin={onLogin} chatEngineAuth={chatEngineAuth} getLocation={getLocation} />
+            <p>
+              <Divider className="account-create">
+                <Chip label="Don't have an account?" />
+              </Divider>
+              <Button variant="outlined" onClick={() => setShowLogin(false)}>
+                Sign Up
+              </Button>
+            </p>
+          </>
+        ) : (
+          <>
+            <h1><PetsIcon sx={{fontSize: 50}}/> Sign Up</h1>
+            <SignUpForm onLogin={onLogin} chatEngineAuth={chatEngineAuth} getLocation={getLocation} user={user}/>
+            <div>
+              <Divider className="account-create">
+                <Chip label="Already have an account?" />
+              </Divider>
+                <Button variant="outlined" onClick={() => setShowLogin(true)}>
+                  Login
+                </Button>
             </div>
-            <button onClick={() => setShowLogin(false)}>
-              Sign Up
-            </button>
-          </p>
-        </>
-      ) : (
-        <>
-          <SignUpForm onLogin={onLogin} chatEngineAuth={chatEngineAuth} getLocation={getLocation} user={user}/>
-          <p>
-            <div className="account-create">
-            Already have an account? &nbsp;
-            </div>
-            <button onClick={() => setShowLogin(true)}>
-              Log In
-            </button>
-          </p>
-        </>
-      )}
-      </>
+          </>
+        )}
+        </Paper>
+      </div>
+    </LoginStyle>
   );
 }
 
 export default Login;
+
+const LoginStyle = styled.div`
+
+  .login:nth-child(1) {
+    margin: auto;
+    width: 60%;
+    position: relative;
+    top: 7.5em;
+  }
+
+  h1 {
+    color: #E68282;
+    font-size: 3em;
+    font-family: 'Fredoka One', cursive;
+    letter-spacing: 0.05em;
+    margin-top: 0.25em;
+  }
+
+  h1 svg {
+    position: relative;
+    top: 0.1em;
+  }
+
+  div {
+    text-align: center;
+  }
+
+  hr {
+    margin: 1em;
+  }
+
+  div button {
+    margin: 1.5em;
+  }
+
+`

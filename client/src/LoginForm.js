@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import {useNavigate} from 'react-router-dom'
 import axios from 'axios';
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import Alert from "@mui/material/Alert";
+import styled from 'styled-components'
 // import { Button, Error, Input, FormField, Label } from "./styles";
 
 function LoginForm({ onLogin, chatEngineAuth, getLocation }) {
@@ -12,7 +16,7 @@ function LoginForm({ onLogin, chatEngineAuth, getLocation }) {
 
   const navigate = useNavigate()
 
-  const handleSubmit= async (e) => {
+  const handleSubmit= (e) => {
     e.preventDefault();
     setIsLoading(true);
     fetch("/login", {
@@ -28,7 +32,7 @@ function LoginForm({ onLogin, chatEngineAuth, getLocation }) {
           onLogin(user)
           getLocation(user.id)
           chatEngineAuth(email, password)
-          navigate('/home')
+          navigate('/profile')
         });
       } else {
         r.json().then((err) => setErrors(err.errors));
@@ -37,47 +41,58 @@ function LoginForm({ onLogin, chatEngineAuth, getLocation }) {
   }
 
   return (
+    <LoginFormStyle>
     <form onSubmit={handleSubmit}>
-      {/* <FormField> */}
-        <label htmlFor="name">Name</label>
-        <input
-          type="text"
-          id="name"
-          autoComplete="off"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-      {/* </FormField> */}
-      {/* <FormField> */}
-        <label htmlFor="email">Email</label>
-        <input
-          type="text"
-          id="email"
-          autoComplete="off"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <label htmlFor="password">Password</label>
-        <input
-          type="password"
-          id="password"
-          autoComplete="current-password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-      {/* </FormField> */}
-      {/* <FormField> */}
-        <button type="submit">
+      <TextField
+        fullWidth
+        required
+        label="Name"
+        name="name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        margin="normal"
+      />
+      <TextField
+        fullWidth
+        required
+        label="Email"
+        name="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        margin="normal"
+      />
+      <TextField
+        fullWidth
+        required
+        type="password"
+        label="Password"
+        name="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        margin="normal"
+      />
+      {errors.map((err) => {
+          return <Alert severity="error" key={err}>{err}</Alert>
+      })}
+      <div className="button-container">
+        <Button type="submit" variant="contained">
           {isLoading ? "Loading..." : "Login"}
-        </button>
-      {/* </FormField> */}
-      {/* <FormField> */}
-        {/* {errors.map((err) => (
-          <Error key={err}>{err}</Error>
-        ))} */}
-      {/* </FormField> */}
+        </Button>
+      </div>
     </form>
+    </LoginFormStyle>
   );
 }
 
 export default LoginForm;
+
+const LoginFormStyle = styled.div`
+
+  form {
+  margin: auto;
+  width: 60%;
+  margin-bottom: 1em;
+  }
+
+
+`

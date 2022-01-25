@@ -5,12 +5,14 @@ import {useLoadScript} from '@react-google-maps/api';
 import Home from './Home';
 import Matches from './Matches';
 import Login from './Login';
+import Button from '@mui/material/Button'
 
 
 import './App.css';
 import ProfileForm from './ProfileForm';
 import ProfilePage from './ProfilePage';
 import NavBar from './NavBar';
+import FullProfileCard from './FullProfileCard';
 
 
 function App() {
@@ -41,9 +43,13 @@ function App() {
     // auto-login
     fetch("/me").then((r) => {
       if (r.ok) {
-        r.json().then((user) => setUser(user));
+        r.json().then((user) => {
+          setUser(user)
+          getLocation(user.id)
+        });
       }
     });
+    
   }, []);
 
   const handleLogoutClick = () => {
@@ -80,15 +86,45 @@ function App() {
     )
   }
 
-  if (!user) return <Login onLogin={setUser} setDistances={setDistances} setAuthCreds={setAuthCreds} />;
-  if (user.profile === null) return <ProfileForm user={user} setUser={setUser}/>
+  const getLocation = (userId) => {
+    navigator.geolocation.getCurrentPosition((position) => {
+      fetch(`/profiles/${userId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+        })
+      })
+      .then(resp => resp.json())
+      .then(data => {
+        console.log(data)
+      })
+    }, () => null)
+  }
 
+  if (!user) return (
+    <>
+    {/* <header className="app-header-login">unLeashed</header> */}
+      <Login onLogin={setUser} setDistances={setDistances} setAuthCreds={setAuthCreds} getLocation={getLocation} />
+  </>
+  )
+  if (user.profile === null) return (
+    <div className="signup-background">
+      <ProfileForm user={user} setUser={setUser} getLocation={getLocation}/>
+    </div>
+  )
+  
   const userId = user.id
 
   return (
     <div className="App">
-      <button onClick={handleLogoutClick}>Logout</button>
-      <NavBar />
+      <header className="app-header">unLeashed</header>
+      <div className="navbar">
+      <NavBar handleLogoutClick={handleLogoutClick}/>
+      </div>
       <Routes>
         <Route 
           path="/home"
@@ -96,12 +132,13 @@ function App() {
         />
         <Route 
           path="/matches"
-          element={<Matches userId={userId} matchUpdate={matchUpdate} setMatchUpdate={setMatchUpdate} setChatProps={setChatProps} authCreds={authCreds}/>}
+          element={<Matches user={user} matchUpdate={matchUpdate} setMatchUpdate={setMatchUpdate} setChatProps={setChatProps} authCreds={authCreds}/>}
         />
         <Route 
           path="/profile"
           element={<ProfilePage user={user} setUser={setUser}/>}
         />
+
       </Routes>
     </div>
   );

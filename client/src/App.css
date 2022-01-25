@@ -1,3 +1,7 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+@import url('https://fonts.googleapis.com/css2?family=Coming+Soon&family=Fredoka+One&display=swap');
+
 .App {
   text-align: center;
 }
@@ -324,4 +328,41 @@
   color: white;
   text-align: center;
   margin-top: 20px;
+}
+
+.app-header {
+  margin: auto;
+  margin-bottom: 0.25em;
+  margin-top: 0.25em;
+  color: white;
+  width: 30%;
+  background-color: #E68282;
+  border-radius: 0.2em 1em 0.2em 1em ;
+  font-size: 3em;
+  font-family: 'Fredoka One', cursive;
+}
+
+.app-header-login {
+  position: relative;
+  bottom: 1.25em;
+  text-align: center;
+  margin: auto;
+  height: 0vh;
+  margin-bottom: 0.25em;
+  margin-top: 0.25em;
+  color: #E68282;
+  width: 30%;
+  background-color: white;
+  border-radius: 0.2em 1em 0.2em 1em ;
+  font-size: 3em;
+  font-family: 'Fredoka One', cursive;
+}
+
+.navbar {
+  margin-bottom: 1.05em;
+}
+
+.signup-background {
+  height: 100vh;
+  background-color: #E68282;
 }

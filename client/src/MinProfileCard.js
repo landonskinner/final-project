@@ -1,7 +1,8 @@
 import React, {useState, useEffect} from 'react'
 import FullProfileCard from './FullProfileCard'
+import styled from 'styled-components'
 
-function MinProfileCard({match, userId}) {
+function MinProfileCard({match, user}) {
     
     // console.log(match.matcher.liker.id)
 
@@ -9,33 +10,45 @@ function MinProfileCard({match, userId}) {
     const [expandProfile, setExpandProfile] = useState(false)
 
     useEffect(() => {
-        if (match.matcher.liker.id !== userId) {
+        if (match.matcher.liker.id !== user.id) {
             setMatchProfile(match.matcher.liker)
         } else {
             setMatchProfile(match.matcher.liked)
         }
-    }, [userId])
+    }, [user])
 
     
     console.log(matchProfile)
     if (!matchProfile) return "Loading matches..."
     return (
-        <div>
+        <MinProfileCardStyle>
         {expandProfile ? 
             <div>
                 <button type="button" onClick={() => setExpandProfile(false)}>X</button>
-                <div>hello</div>
                 <FullProfileCard match={matchProfile} />
             </div>
             :
-            <div onClick={() => setExpandProfile(true)}>
+            <div className="min-card" onClick={() => setExpandProfile(true)}>
                 {/* redo conditional logic below for default img */}
-                {/* <img src={!!matchProfile.profile ? matchProfile.profile.photos[0].image : ''} alt={matchProfile.name} /> */}
+                <img className="min-photo" src={matchProfile.profile.photos[0].image} alt={matchProfile.name} />
                 <div>{matchProfile.name}</div>
             </div>
         }
-        </div>
+        </MinProfileCardStyle>
     )
 }
 
 export default MinProfileCard
+
+const MinProfileCardStyle = styled.div`
+
+    display: inline-block;
+    /* .min-card {
+        display: inline;
+    } */
+
+    .min-photo {
+        width: 10%;
+    }
+
+`

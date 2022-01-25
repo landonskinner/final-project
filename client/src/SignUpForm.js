@@ -2,6 +2,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import ProfileForm from "./ProfileForm";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import Alert from "@mui/material/Alert";
+import styled from 'styled-components'
 // import { Button, Error, Input, FormField, Label } from "./styles";
 
 function SignUpForm({ onLogin, chatEngineAuth, getLocation, user }) {
@@ -24,7 +28,7 @@ function SignUpForm({ onLogin, chatEngineAuth, getLocation, user }) {
     method: 'POST',
     headers: {
       "Content-Type": "application/json",
-      'PRIVATE-KEY': '{{08f20fb5-2954-4d90-9e81-021b9bb38069}}'
+      'PRIVATE-KEY': '{{dc8ac88a-ee8a-4c29-b623-46c3305c4c1c}}'
     },
     body: JSON.stringify(chatAccountData)
   }
@@ -44,26 +48,29 @@ function SignUpForm({ onLogin, chatEngineAuth, getLocation, user }) {
       if (r.ok) {
         r.json().then((user) => {
           onLogin(user)
-          fetch('/profiles', {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({user_id: user.id})
-          })
-          .then(resp => resp.json())
-          .then(() => {
-            getLocation(user.id)
-          })
+          // fetch('/profiles', {
+          //   method: "POST",
+          //   headers: {
+          //     "Content-Type": "application/json"
+          //   },
+          //   body: JSON.stringify({user_id: user.id})
+          // })
+          // .then(r => {
+          //   if (r.ok) {
+          //     r.json().then(() => getLocation(user.id))
+          //   } else {
+          //     r.json().then((err) => setErrors(err.errors))
+          //   }
+          // })
           fetch('https://api.chatengine.io/users/', configObj)
           .then(r => {
             if (r.ok) {
               r.json().then(user => {
                 chatEngineAuth(email, password)
-                navigate('/home')
+                navigate('/profile')
               })
             } else {
-              r.json().then((err) => console.log(err))
+              r.json().then((err) => setErrors(err.errors))
             }
           })
         });
@@ -74,39 +81,57 @@ function SignUpForm({ onLogin, chatEngineAuth, getLocation, user }) {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-        <label htmlFor="name">Name</label>
-        <input
-          type="text"
-          id="name"
-          autoComplete="off"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <label htmlFor="email">Email</label>
-        <input
-          type="text"
-          id="email"
-          autoComplete="off"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <label htmlFor="password">Password</label>
-        <input
-          type="password"
-          id="password"
-          autoComplete="current-password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button type="submit">
-          {isLoading ? "Loading..." : "Login"}
-        </button>
-        {errors.map((err) => (
-          <div key={err}>{err}</div>
-        ))}
+    <SignUpFormStyle>
+    <form onSubmit={handleSubmit} className="signup-form">
+        <TextField
+        required
+        label="Name"
+        name="name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        margin="normal"
+        fullWidth
+      />
+      <TextField
+        required
+        label="Email"
+        name="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        margin="normal"
+        fullWidth
+      />
+      <TextField
+        required
+        type="password"
+        label="Password"
+        name="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        margin="normal"
+        fullWidth
+      />
+      {errors.map((err) => {
+          return <Alert severity="error" key={err}>{err}</Alert>
+      })}
+      <div className="button-container">
+        <Button type="submit" variant="contained">
+          {isLoading ? "Loading..." : "Sign Up"}
+        </Button>
+      </div>
     </form>
+    </SignUpFormStyle>
   );
 }
 
 export default SignUpForm;
+
+const SignUpFormStyle = styled.div`
+
+  form {
+    margin: auto;
+    width: 60%;
+    margin-bottom: 1em;
+  }
+
+`

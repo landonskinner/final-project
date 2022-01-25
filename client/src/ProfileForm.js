@@ -1,9 +1,15 @@
 import React, {useState, useEffect} from 'react';
-import {useNavigate} from 'react-router-dom'
+import TextField from '@mui/material/TextField'
+import MenuItem from '@mui/material/MenuItem';
+import Button from '@mui/material/Button';
+import Paper from "@mui/material/Paper";
+import Alert from "@mui/material/Alert";
+import IconButton from '@mui/material/IconButton';
+import CancelIcon from '@mui/icons-material/Cancel';
+import styled from 'styled-components'
 
-function ProfileForm({user, type, setUser}) {
 
-    const navigate = useNavigate()
+function ProfileForm({user, type, setUser, setEditClick, getLocation}) {
 
     const [photo, setPhoto] = useState("")
     const [errors, setErrors] = useState([]);
@@ -16,6 +22,7 @@ function ProfileForm({user, type, setUser}) {
         personality: ""
     })
 
+    // populate edit form with existing profile data
     useEffect(() => {
         if (type === "edit") {
             fetch(`/profiles/${user.id}`)
@@ -24,16 +31,71 @@ function ProfileForm({user, type, setUser}) {
             }
     }, [])
 
+    const sizeOptions = ['Tiny', 'Small', 'Medium', 'Large', 'Huge']
+    const personalityOptions = ['Goofy', 'Energetic', 'AwesomestestEver']
+
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
         console.log(formData)
     };
     
-
-  const handleProfile = (e) => {
-
-    // if (type === "edit") {
+    const handleProfile = (e) => {
         e.preventDefault()
+        if (user.profile === null) {
+            fetch('/profiles', {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json"
+                },
+                body: JSON.stringify(formData)
+              })
+              .then(r => {
+                if (r.ok) {
+                  r.json().then((profile) => {
+                      getLocation(user.id)
+                      if (photo !== "") {
+                        fetch('/photos', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                "profile_id": profile.id,
+                                'image': photo
+                            })
+                        })
+                        .then(resp => resp.json())
+                        .then(() => {
+                            setPhoto("")
+                            fetch(`/users/${user.id}`)
+                            .then(resp => resp.json())
+                            .then(setUser)
+                        })
+                    } else {
+                        fetch('/photos', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                "profile_id": profile.id,
+                                'image': 'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/65761296352685.5eac4787a4720.jpg'
+                            })
+                        })
+                        .then(resp => resp.json())
+                        .then(() => {
+                            setPhoto("")
+                            fetch(`/users/${user.id}`)
+                            .then(resp => resp.json())
+                            .then(setUser)
+                        })
+                    }
+                    })
+                } else {
+                  r.json().then((err) => setErrors(err.errors))
+                }
+              })
+        } else {
             fetch(`/profiles/${user.id}`, {
                 method: 'PATCH',
                 headers: {
@@ -43,7 +105,7 @@ function ProfileForm({user, type, setUser}) {
             })
             .then(resp => resp.json())
             .then(profile => {
-                 {
+                if (photo !== "") {
                     fetch('/photos', {
                         method: 'POST',
                         headers: {
@@ -55,117 +117,185 @@ function ProfileForm({user, type, setUser}) {
                         })
                     })
                     .then(resp => resp.json())
-                    .then(data => {
+                    .then(() => {
+                        setPhoto("")
+                        if (type === "edit") {
+                            setEditClick(false)
+                        }
                         fetch(`/users/${user.id}`)
                         .then(resp => resp.json())
-                        .then(user => {
-                            setUser(user)
-                        })
+                        .then(setUser)
                     })
+                } else {
+                    if (type === "edit") {
+                        setEditClick(false)
+                    }
+                        fetch(`/users/${user.id}`)
+                        .then(resp => resp.json())
+                        .then(setUser)
                 }
+                
             })
-            
+        }
+
         
-    // } else {
-    //     e.preventDefault()
-    //     fetch('/profiles', {
-    //         method: 'POST',
-    //         headers: {
-    //             'Content-Type': 'application/json'
-    //         },
-    //         body: JSON.stringify(formData)
-    //     })
-    //     .then(resp => resp.json())
-    //     .then(profile => {
-    //         if (photo !== "") {
-    //             fetch('/photos', {
-    //                 method: 'POST',
-    //                 headers: {
-    //                     'Content-Type': 'application/json'
-    //                 },
-    //                 body: JSON.stringify({
-    //                     "profile_id": profile.id,
-    //                     'image': photo
-    //                 })
-    //             })
-    //         }
-
-            
-            
-    //         fetch(`/users/${user.id}`)
-    //             .then(resp => resp.json())
-    //             .then(user => {
-    //                 console.log(user)
-    //                 // setUser(user)
-    //                 // navigate('/home')
-    //             })
-
-    // })
-    
-
-    // }
-  }
+        
+    }
 
   return (
-    <div>
-    <form onSubmit={(e) => handleProfile(e)}>
-      <label htmlFor="bio">Bio</label>
-      <input
-        type="text"
-        name="bio"
-        autoComplete="off"
-        value={formData.bio}
-        onChange={(e) => handleChange(e)}
-      />
-      <label htmlFor="age">Age</label>
-      <input
-        type="text"
-        name="age"
-        autoComplete="off"
-        value={formData.age}
-        onChange={(e) => handleChange(e)}
-      />
-      <label htmlFor="size">Size</label>
-      <input
-        type="text"
-        name="size"
-        autoComplete="off"
-        value={formData.size}
-        onChange={(e) => handleChange(e)}
-      />
-      <label htmlFor="location">Location</label>
-      <input
-        type="text"
-        name="location"
-        autoComplete="off"
-        value={formData.location}
-        onChange={(e) => handleChange(e)}
-      />
-      <label htmlFor="personality">Personality</label>
-      <input
-        type="text"
-        name="personality"
-        autoComplete="off"
-        value={formData.personality}
-        onChange={(e) => handleChange(e)}
-      />
-      <label htmlFor="photo">Photo</label>
-      <input
-        type="text"
-        id="photo"
-        autoComplete="off"
-        value={photo}
-        onChange={(e) => setPhoto(e.target.value)}
-      />
-      <button type="submit">
-        {type === "edit" ? "Edit Profile" : "Create Profile"}
-      </button>
-      {errors.map((err) => (
-        <div key={err}>{err}</div>
-      ))}
-    </form>
-    </div>
+    <ProfileFormStyle>
+        <div className="profile-edit">
+            <Paper elevation={4} variant="outlined">
+                {type === "edit" ?  
+                <IconButton type="button" className="cancel-button" size="large">
+                    <CancelIcon onClick={() => setEditClick(false)}/>
+                </IconButton>
+                : 
+                null
+                }
+                <form onSubmit={(e) => handleProfile(e)}>
+                <TextField 
+                    required
+                    label="Bio"
+                    multiline
+                    name="bio"
+                    autoComplete="off"
+                    value={formData.bio}
+                    onChange={(e) => handleChange(e)}
+                    margin="normal"
+                    fullWidth
+                />
+                <div className="form-separator">
+                <TextField
+                    required
+                    label="Age"
+                    type="number"
+                    name="age"
+                    min="0"
+                    max="20"
+                    value={formData.age}
+                    onChange={(e) => handleChange(e)}
+                    margin="normal"
+                    inputProps={{
+                        style: {
+                            width: '2em',
+                            // textAlign: 'center'
+                        }
+                    }}
+                    fullWidth={type !== "edit"}
+                    />
+                <TextField
+                    select
+                    required
+                    label="Size"
+                    name="size" 
+                    id="size" 
+                    value={formData.size} 
+                    onChange={(e) => handleChange(e)}
+                    margin="normal"
+                    fullWidth={type !== "edit"}
+                >
+                    {sizeOptions.map((size) => {
+                        return (
+                            <MenuItem key={size} value={size}>
+                            {size}
+                            </MenuItem>
+                        )
+                    })}
+                </TextField>
+                <TextField
+                    required
+                    select
+                    label="Personality"
+                    type="text"
+                    name="personality"
+                    value={formData.personality}
+                    onChange={(e) => handleChange(e)}
+                    margin="normal"
+                    fullWidth={type !== "edit"}
+                >
+                    {personalityOptions.map((size) => {
+                        return (
+                            <MenuItem key={size} value={size}>
+                            {size}
+                            </MenuItem>
+                        )
+                    })}
+                </TextField>
+                
+                <TextField 
+                    required
+                    label="City"
+                    type="text"
+                    name="location"
+                    autoComplete="off"
+                    value={formData.location}
+                    onChange={(e) => handleChange(e)}
+                    margin="normal"
+                    inputProps={{
+                        style: {
+                            width: '65%'
+                        }
+                    }}
+                    fullWidth={type !== "edit"}
+                />
+                </div>
+                <TextField
+                    label="Photo"
+                    type="text"
+                    name="photo"
+                    placeholder="Upload a photo link..."
+                    value={photo}
+                    onChange={(e) => setPhoto(e.target.value)}
+                    margin="normal"
+                    fullWidth
+                />
+                {errors.map((err) => (
+                    <Alert severity="error" key={err}>{err}</Alert>
+                ))}
+                <Button type="submit" variant="contained" color="primary">
+                    {type === "edit" ? "Edit Profile" : "Create Profile"}
+                </Button>
+                </form>
+            </Paper>
+        </div>
+    </ProfileFormStyle>
   );
 }
 
 export default ProfileForm;
+
+const ProfileFormStyle = styled.div`
+
+    position: relative;
+    top: 7.5em;
+
+  form {
+    margin: auto;
+    width: 80%;
+    margin-bottom: 1em;
+    margin-top: 2.5em;
+  }
+
+  .form-separator {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .profile-edit:first-child {
+    margin: auto;
+    width: 60%;
+  }
+
+  .cancel-button {
+    float: right;
+    margin: 0.15em;
+  }
+
+  button[type="submit"] {
+      margin: auto;
+      margin: 1em;
+      margin-top: 1.25em;
+  }
+
+`
