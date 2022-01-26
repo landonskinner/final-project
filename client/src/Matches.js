@@ -35,14 +35,13 @@ function Matches({user, matchUpdate, authCreds}) {
                 {displayMatches()}
             </div>
             <ChatEngine 
-                height="100vh"
+                height="80vh"
                 projectID="bdccd118-daa8-45d2-b72f-297005ad398a"
                 userName={sessionStorage.getItem('username')}
                 userSecret={sessionStorage.getItem('password')}
+                onConnect={(e) => console.log(e)}
                 renderChatFeed={(chatAppProps) => <ChatFeed {...chatAppProps} />}
                 renderChatList={(chatAppProps) => <ChatList {...chatAppProps} />}
-                renderChatHeader={() => <div />}
-                renderChatForm={() => <div />}
             />
         </MatchesStyle>
     )

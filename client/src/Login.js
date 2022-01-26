@@ -52,11 +52,14 @@ function Login({ onLogin, setDistances, user, setAuthCreds, getLocation }) {
 
   return (
     <LoginStyle style={{backgroundColor: '#E68282', height: '100vh'}}>
+      <div className="header-parent">
+        <div className="app-header-login">unLeashed</div>
+      </div>
       <div className="login">
         <Paper elevation={4} variant="outlined">
         {showLogin ? (
           <>
-            <h1><PetsIcon sx={{fontSize: 50}}/> Login</h1>
+            <h1><PetsIcon sx={{fontSize: 40}}/> Login</h1>
             <LoginForm onLogin={onLogin} chatEngineAuth={chatEngineAuth} getLocation={getLocation} />
             <p>
               <Divider className="account-create">
@@ -69,7 +72,7 @@ function Login({ onLogin, setDistances, user, setAuthCreds, getLocation }) {
           </>
         ) : (
           <>
-            <h1><PetsIcon sx={{fontSize: 50}}/> Sign Up</h1>
+            <h1><PetsIcon sx={{fontSize: 40}}/> Sign Up</h1>
             <SignUpForm onLogin={onLogin} chatEngineAuth={chatEngineAuth} getLocation={getLocation} user={user}/>
             <div>
               <Divider className="account-create">
@@ -91,16 +94,16 @@ export default Login;
 
 const LoginStyle = styled.div`
 
-  .login:nth-child(1) {
+  .login:nth-child(2) {
     margin: auto;
     width: 60%;
     position: relative;
-    top: 7.5em;
+    top: 3.5em;
   }
 
   h1 {
     color: #E68282;
-    font-size: 3em;
+    font-size: 2.5em;
     font-family: 'Fredoka One', cursive;
     letter-spacing: 0.05em;
     margin-top: 0.25em;

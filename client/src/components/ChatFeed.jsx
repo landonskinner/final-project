@@ -2,6 +2,7 @@ import { render } from "@testing-library/react";
 import MessageForm from "./MessageForm";
 import MyMessage from "./MyMessage";
 import TheirMessage from "./TheirMessage";
+import CircularProgress from '@mui/material/CircularProgress';
 
 const ChatFeed = (props) => {
     const { chats, activeChat, userName, messages } = props;
@@ -30,7 +31,7 @@ const ChatFeed = (props) => {
         })
     }
 
-    if (!chat) return 'Loading...'
+    if (!chat) return <div style={{position: 'relative', top: '12em', left: '14em'}}><CircularProgress color="primary" /></div>
     
     return (
         <div className="chat-feed">

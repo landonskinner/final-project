@@ -85,6 +85,7 @@ export default FullProfileCard
 const FullProfileCardStyle = styled.div`
 
     margin-top: 2em;
+    margin-bottom: 4em;
 
     .profile-card {
         border: 2px solid grey;
@@ -119,7 +120,7 @@ const FullProfileCardStyle = styled.div`
 
     img {
         flex-shrink: 0;
-        min-width: 100%;
+        width: 100%;
         height: 50vw;
         object-fit: cover;
         border-radius: 1em 1em 0 0;

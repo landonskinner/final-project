@@ -14,6 +14,8 @@ import ProfilePage from './ProfilePage';
 import NavBar from './NavBar';
 import FullProfileCard from './FullProfileCard';
 
+import {ChatEngine, ChatList} from  'react-chat-engine';
+import ChatFeed from './components/ChatFeed';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -62,9 +64,11 @@ function App() {
     });
   }
 
-  const { conn } = useContext(ChatEngineContext)
-
+  const { connecting, conn } = useContext(ChatEngineContext)
+  console.log(connecting, conn)
   const createMatchChat = (matched_user) => {
+    console.log(conn)
+    if (!connecting && conn) {
     newChat(
       conn,
       { title: `${matched_user.name} & ${user.name}`},
@@ -84,6 +88,7 @@ function App() {
         )
       }
     )
+    }
   }
 
   const getLocation = (userId) => {
@@ -138,8 +143,18 @@ function App() {
           path="/profile"
           element={<ProfilePage user={user} setUser={setUser}/>}
         />
-
+        
       </Routes>
+      <div style={{display: 'none'}}>
+        <ChatEngine 
+                height="80vh"
+                projectID="bdccd118-daa8-45d2-b72f-297005ad398a"
+                userName={sessionStorage.getItem('username')}
+                userSecret={sessionStorage.getItem('password')}
+                renderChatFeed={(chatAppProps) => <ChatFeed {...chatAppProps} />}
+                renderChatList={(chatAppProps) => <ChatList {...chatAppProps} />}
+            />
+      </div>
     </div>
   );
 }

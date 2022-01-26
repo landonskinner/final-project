@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import ProfileCard from './ProfileCard'
 import CircularProgress from '@mui/material/CircularProgress';
+import styled from 'styled-components'
 
 function SwipeContainer({userId, matchUpdate, setMatchUpdate, createMatchChat, addUser, loggedInUser, setRefresh}) {
 
@@ -23,10 +24,26 @@ function SwipeContainer({userId, matchUpdate, setMatchUpdate, createMatchChat, a
     }
     
     return (
-        <div>
+        <SwipeContainerStyle>
+        <div className="user-stack">
             {renderUserStack()}
         </div>
+        </SwipeContainerStyle>
     )
 }
 
 export default SwipeContainer
+
+const SwipeContainerStyle = styled.div`
+
+    
+/* 
+    .full-card {
+        display: block;
+    }
+
+    .full-card ~ .full-card {
+        display: none;
+    } */
+
+`

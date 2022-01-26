@@ -18,7 +18,7 @@ function TheirMessage({lastMessage, message}) {
                         style={{marginLeft: isFirstMessageByUser ? '4px' : '48px'}}
                     />
                 ) : (
-                    <div className="message" style={{float: 'left', backgroundColor: '#CABCDC', marginLeft: isFirstMessageByUser ? '4px' : '48px'}}>
+                    <div className="message" style={{float: 'left', backgroundColor: '#f3c1c1', marginLeft:'4px'}}>
                         {message.text}
                     </div>
                 )

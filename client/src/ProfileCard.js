@@ -99,7 +99,7 @@ function ProfileCard({user, userId, loggedInUser, matchUpdate, setMatchUpdate, c
 
     console.log(user)
     return (
-        <ProfileCardStyle>
+        <ProfileCardStyle className="full-card">
             {matched ?
                 <Backdrop onClick={handleClose} open={matched}>
                 <div className="match-alert">
@@ -146,7 +146,8 @@ const ProfileCardStyle = styled.div`
         border: 2px solid grey;
         border-radius: 1.1em;
         margin: auto;
-        width: 50%;
+        margin-bottom: 2em;
+        width: 40%;
     }
 
     .profile-card:first-child {
@@ -179,10 +180,10 @@ const ProfileCardStyle = styled.div`
 
     img {
         flex-shrink: 0;
-        min-width: 100%;
-        height: 50vw;
+        width: 100%;
+        height: 40vw;
         object-fit: cover;
-        border-radius: 1em 1em 0 0;
+        border-radius: 1em 1em 0 0 !important;
     }
 
     .match-alert {
