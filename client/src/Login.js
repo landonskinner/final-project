@@ -2,85 +2,70 @@ import { useState } from "react";
 import LoginForm from "./LoginForm";
 import SignUpForm from "./SignUpForm";
 import axios from "axios";
-import {useLoadScript} from '@react-google-maps/api';
+
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import Chip from "@mui/material/Chip";
 import PetsIcon from '@mui/icons-material/Pets';
 import styled from 'styled-components'
-// import Header from "./Header";
 
-function Login({ onLogin, setDistances, user, setAuthCreds, getLocation }) {
+
+function Login({ onLogin, getLocation }) {
+
   const [showLogin, setShowLogin] = useState(true);
-  
 
-  const chatEngineAuth = (email, password) => {
+  const chatEngineAuth = async (email, password) => {
     
     const authObject = {
-      'Project-ID': 'bf817150-60ae-4184-8c44-560074764477',
-      'User-Name': email,
-      'User-Secret': password
+      'Project-ID': '{{bdccd118-daa8-45d2-b72f-297005ad398a}}',
+      'User-Name': `{{${email}}}`,
+      'User-Secret': `{{${password}}}`
     }
 
     // login request to ChatEngine
     try {
-       axios.get('https://api.chatengine.io/chats', {headers: authObject})
-      //  setAuthCreds({
-      //    'username': email,
-      //    'password': password
-      //  })
+      await axios.get('https://api.chatengine.io/', {headers: authObject})
       sessionStorage.setItem('username', email);
       sessionStorage.setItem('password', password)
-      // try to implement without password in local storage
+      // try to implement without password in storage
 
     } catch (error) {
         console.log('Incorrect credentials!')
     }
   }
 
-  const libraries = ["places"]
-
-  // const {isLoaded, loadError} =  useLoadScript({
-  //   // googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
-  //   googleMapsApiKey: 'AIzaSyBhDtGcEOvImN19q4Zvye6G9O1VIkrkn5g',
-  //   libraries
-  // })
-
-  
-
-
   return (
-    <LoginStyle style={{backgroundColor: '#E68282', height: '100vh'}}>
+    <LoginStyle>
       <div className="header-parent">
         <div className="app-header-login">unLeashed</div>
       </div>
       <div className="login">
-        <Paper elevation={4} variant="outlined">
+        <Paper variant="outlined">
         {showLogin ? (
           <>
             <h1><PetsIcon sx={{fontSize: 40}}/> Login</h1>
             <LoginForm onLogin={onLogin} chatEngineAuth={chatEngineAuth} getLocation={getLocation} />
-            <p>
+            <div>
               <Divider className="account-create">
                 <Chip label="Don't have an account?" />
               </Divider>
               <Button variant="outlined" onClick={() => setShowLogin(false)}>
                 Sign Up
               </Button>
-            </p>
+            </div>
           </>
         ) : (
           <>
             <h1><PetsIcon sx={{fontSize: 40}}/> Sign Up</h1>
-            <SignUpForm onLogin={onLogin} chatEngineAuth={chatEngineAuth} getLocation={getLocation} user={user}/>
+            <SignUpForm onLogin={onLogin} chatEngineAuth={chatEngineAuth} getLocation={getLocation} />
             <div>
               <Divider className="account-create">
                 <Chip label="Already have an account?" />
               </Divider>
-                <Button variant="outlined" onClick={() => setShowLogin(true)}>
-                  Login
-                </Button>
+              <Button variant="outlined" onClick={() => setShowLogin(true)}>
+                Login
+              </Button>
             </div>
           </>
         )}
@@ -94,9 +79,12 @@ export default Login;
 
 const LoginStyle = styled.div`
 
+  background-color: #E68282;
+  height: 100vh;
+
   .login:nth-child(2) {
     margin: auto;
-    width: 60%;
+    width: 40%;
     position: relative;
     top: 3.5em;
   }

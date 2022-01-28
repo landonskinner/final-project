@@ -32,7 +32,7 @@ function ProfileForm({user, type, setUser, setEditClick, getLocation}) {
     }, [])
 
     const sizeOptions = ['Tiny', 'Small', 'Medium', 'Large', 'Huge']
-    const personalityOptions = ['Goofy', 'Energetic', 'AwesomestestEver']
+    const personalityOptions = ['Timid', 'Lazy', 'Calm', 'Outgoing', 'Indpendent']
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -143,6 +143,14 @@ function ProfileForm({user, type, setUser, setEditClick, getLocation}) {
     }
 
   return (
+      <>
+    {type === "edit" ?
+    null
+    :
+    <div className="header-parent">
+        <div className="app-header-login">unLeashed</div>
+    </div>
+    }
     <ProfileFormStyle>
         <div className="profile-edit">
             <Paper elevation={4} variant="outlined">
@@ -151,7 +159,7 @@ function ProfileForm({user, type, setUser, setEditClick, getLocation}) {
                     <CancelIcon onClick={() => setEditClick(false)}/>
                 </IconButton>
                 : 
-                null
+                <div className="location-alert">Please enable location access for full app functionality!</div>
                 }
                 <form onSubmit={(e) => handleProfile(e)}>
                 <TextField 
@@ -234,7 +242,7 @@ function ProfileForm({user, type, setUser, setEditClick, getLocation}) {
                     margin="normal"
                     inputProps={{
                         style: {
-                            width: '65%'
+                            width: '55%'
                         }
                     }}
                     fullWidth={type !== "edit"}
@@ -253,13 +261,16 @@ function ProfileForm({user, type, setUser, setEditClick, getLocation}) {
                 {errors.map((err) => (
                     <Alert severity="error" key={err}>{err}</Alert>
                 ))}
+                <div className="button-holder">
                 <Button type="submit" variant="contained" color="primary">
                     {type === "edit" ? "Edit Profile" : "Create Profile"}
                 </Button>
+                </div>
                 </form>
             </Paper>
         </div>
     </ProfileFormStyle>
+    </>
   );
 }
 
@@ -268,7 +279,8 @@ export default ProfileForm;
 const ProfileFormStyle = styled.div`
 
     position: relative;
-    top: 7.5em;
+    top: 3.5em;
+
 
   form {
     margin: auto;
@@ -293,9 +305,22 @@ const ProfileFormStyle = styled.div`
   }
 
   button[type="submit"] {
-      margin: auto;
-      margin: 1em;
-      margin-top: 1.25em;
+    margin: 1em; 
+  }
+
+  .button-holder {
+    text-align: center;
+  }
+
+  .location-alert {
+    display: inline-block;
+    position: relative;
+    top: 1.75em;
+    margin: auto;
+    width: 100%;
+    text-align: center;
+    font-family: Roboto;
+    color: #7b7b7b;
   }
 
 `

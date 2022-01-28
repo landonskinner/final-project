@@ -1,9 +1,8 @@
 import React, {useEffect, useState} from 'react'
 import ProfileCard from './ProfileCard'
 import CircularProgress from '@mui/material/CircularProgress';
-import styled from 'styled-components'
 
-function SwipeContainer({userId, matchUpdate, setMatchUpdate, createMatchChat, addUser, loggedInUser, setRefresh}) {
+function SwipeContainer({user}) {
 
     const [userStack, setUserStack] = useState('')
 
@@ -11,39 +10,39 @@ function SwipeContainer({userId, matchUpdate, setMatchUpdate, createMatchChat, a
         fetch('/users')
         .then(resp => resp.json())
         .then(users => setUserStack(users))
-    }, [userId])
-    console.log(userStack)
+    }, [user])
+
     const renderUserStack = () => {
         if (!userStack) {
-            return <div style={{position: 'relative', top: '12em'}}><CircularProgress color="primary" /></div>
+            return <div style={{position: 'absolute', top: '50vh', left: '50vw'}}><CircularProgress color="primary" /></div>
         } else if (userStack.length === 0) {
-            return <div>You've seen all users! Try updating your preferences for more.</div>
+            return <div 
+                        style={
+                            {
+                                margin: 'auto',
+                                marginTop: '6em',
+                                backgroundColor: '#e68282',
+                                width: '60%',
+                                height: '10em',
+                                lineHeight: '10em',
+                                color: 'white',
+                                fontWeight: '700',
+                                borderRadius: '2em'
+                            }
+                        }
+                    >
+                        You've seen all users! Try updating your preferences for more.
+                    </div>
         } else {
-            return userStack.map((user) => <ProfileCard key={user.id} setRefresh={setRefresh} loggedInUser={loggedInUser} user={user} userId={userId} matchUpdate={matchUpdate} setMatchUpdate={setMatchUpdate} createMatchChat={createMatchChat} addUser={addUser}/>)
+            return userStack.map((otherUser) => <ProfileCard key={user.id} user={user} otherUser={otherUser} />)
         }
     }
     
     return (
-        <SwipeContainerStyle>
-        <div className="user-stack">
-            {renderUserStack()}
-        </div>
-        </SwipeContainerStyle>
+            <div className="user-stack">
+                {renderUserStack()}
+            </div>
     )
 }
 
 export default SwipeContainer
-
-const SwipeContainerStyle = styled.div`
-
-    
-/* 
-    .full-card {
-        display: block;
-    }
-
-    .full-card ~ .full-card {
-        display: none;
-    } */
-
-`

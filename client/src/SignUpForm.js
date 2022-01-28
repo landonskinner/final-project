@@ -1,14 +1,12 @@
-
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router";
-import ProfileForm from "./ProfileForm";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Alert from "@mui/material/Alert";
 import styled from 'styled-components'
-// import { Button, Error, Input, FormField, Label } from "./styles";
 
-function SignUpForm({ onLogin, chatEngineAuth, getLocation, user }) {
+function SignUpForm({ onLogin, chatEngineAuth, getLocation }) {
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -28,15 +26,16 @@ function SignUpForm({ onLogin, chatEngineAuth, getLocation, user }) {
     method: 'POST',
     headers: {
       "Content-Type": "application/json",
-      'PRIVATE-KEY': '{{dc8ac88a-ee8a-4c29-b623-46c3305c4c1c}}'
+      'PRIVATE-KEY': `{{${process.env.REACT_APP_CHAT_ENGINE_IO_KEY}}}`
     },
     body: JSON.stringify(chatAccountData)
   }
 
-  function handleSubmit(e) {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setErrors([])
     setIsLoading(true);
+    // create new user account for app
     fetch("/signup", {
       method: "POST",
       headers: {
@@ -44,24 +43,11 @@ function SignUpForm({ onLogin, chatEngineAuth, getLocation, user }) {
       },
       body: JSON.stringify({ name, email, password }),
     }).then((r) => {
-      // setIsLoading(false);
       if (r.ok) {
         r.json().then((user) => {
           onLogin(user)
-          // fetch('/profiles', {
-          //   method: "POST",
-          //   headers: {
-          //     "Content-Type": "application/json"
-          //   },
-          //   body: JSON.stringify({user_id: user.id})
-          // })
-          // .then(r => {
-          //   if (r.ok) {
-          //     r.json().then(() => getLocation(user.id))
-          //   } else {
-          //     r.json().then((err) => setErrors(err.errors))
-          //   }
-          // })
+          getLocation(user.id)
+          // create new user account for ChatEngine
           fetch('https://api.chatengine.io/users/', configObj)
           .then(r => {
             if (r.ok) {
@@ -73,11 +59,11 @@ function SignUpForm({ onLogin, chatEngineAuth, getLocation, user }) {
               r.json().then((err) => setErrors(err.errors))
             }
           })
-        });
+        })
       } else {
         r.json().then((err) => setErrors(err.errors));
       }
-    });
+    })
   }
 
   return (
@@ -130,7 +116,7 @@ const SignUpFormStyle = styled.div`
 
   form {
     margin: auto;
-    width: 60%;
+    width: 80%;
     margin-bottom: 1em;
   }
 

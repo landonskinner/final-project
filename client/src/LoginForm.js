@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import {useNavigate} from 'react-router-dom'
-import axios from 'axios';
+
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Alert from "@mui/material/Alert";
 import styled from 'styled-components'
-// import { Button, Error, Input, FormField, Label } from "./styles";
 
 function LoginForm({ onLogin, chatEngineAuth, getLocation }) {
   const [name, setName] = useState("");
@@ -90,7 +89,7 @@ const LoginFormStyle = styled.div`
 
   form {
   margin: auto;
-  width: 60%;
+  width: 80%;
   margin-bottom: 1em;
   }
 

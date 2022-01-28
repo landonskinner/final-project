@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react'
 
 import SwipeButtons from './SwipeButtons'
-import Container from '@mui/material/Container'
 import IconButton from '@mui/material/IconButton'
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import Carousel from 'react-material-ui-carousel'
@@ -10,46 +9,50 @@ import StraightenIcon from '@mui/icons-material/Straighten';
 import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
 import BungalowIcon from '@mui/icons-material/Bungalow';
 import Backdrop from '@mui/material/Backdrop';
+
+import { makeStyles } from "@mui/styles";
 import styled from 'styled-components'
 
-function ProfileCard({user, userId, loggedInUser, matchUpdate, setMatchUpdate, createMatchChat, addUser, setRefresh}) {
+function ProfileCard({otherUser, user}) {
+    
+    const useStyles = makeStyles((theme) => ({
+        backdrop: {
+            zIndex: theme.zIndex.drawer + 1
+        }
+    }))
+    const classes = useStyles()
 
     const [swiped, setSwiped] = useState(false)
     const [matched, setMatched] = useState(false)
     const [distance, setDistance] = useState('')
 
-
+    //  calculate distance between each user pair with coordinates
     useEffect(() => {
-            const lat = loggedInUser.profile.lat
-            const lng = loggedInUser.profile.lng
             const rad_per_deg = Math.PI/180
             const rm = 3963
-            const lat_rad = lat * rad_per_deg
-            const lat_1 = user.profile.lat
-            const lng_1 = user.profile.lng
-            const dlat = (lat_1 - lat) * rad_per_deg
-            const dlng = (lng_1 - lng) * rad_per_deg
-            const lat_rad_1 = lat_1 * rad_per_deg
+            const lat_rad = user.profile.lat * rad_per_deg
+            const dlat = (otherUser.profile.lat - user.profile.lat) * rad_per_deg
+            const dlng = (otherUser.profile.lng - user.profile.lng) * rad_per_deg
+            const lat_rad_1 = otherUser.profile.lat * rad_per_deg
             const a = Math.sin(dlat/2)**2 + Math.cos(lat_rad) * Math.cos(lat_rad_1) * Math.sin(dlng/2)**2
             const d = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))
             setDistance(Math.round(rm * d))
     }, [])
 
     const handleSwipe = (e, button) => {
-        console.log(e.target.name, e.target.id, user)
 
         // create object to post based on user like/dislike
         const likeObj = () => {
             if (button === 'dislike-button') {
                 return {
-                    liker_id: userId,
-                    liked_id: user.id,
+                    liker_id: user.id,
+                    liked_id: otherUser.id,
                     matched: false
                 }
             } else if (button === 'like-button') {
                 return {
-                    liker_id: userId,
-                    liked_id: user.id,
+                    liker_id: user.id,
+                    liked_id: otherUser.id,
                     matched: true
                 }
             }
@@ -79,17 +82,12 @@ function ProfileCard({user, userId, loggedInUser, matchUpdate, setMatchUpdate, c
                 })
                 .then(resp => resp.json())
                 .then(match => {
-                    // console.log(match)
                     if (match.id) {
-                        setMatchUpdate(!matchUpdate)
-                        createMatchChat(user)
                         setMatched(true)
                     }
-                    // handle match functionality here
                 })
             }
             setSwiped(true)
-            
         })
     }
 
@@ -97,15 +95,14 @@ function ProfileCard({user, userId, loggedInUser, matchUpdate, setMatchUpdate, c
         setMatched(false)
     }
 
-    console.log(user)
     return (
         <ProfileCardStyle className="full-card">
             {matched ?
-                <Backdrop onClick={handleClose} open={matched}>
-                <div className="match-alert">
-                    <h3>{`You have matched with ${user.name}!`}</h3>
-                    <IconButton color="primary"><CheckCircleIcon/></IconButton>
-                </div>
+                <Backdrop onClick={handleClose} open={matched} className={classes.backdrop}>
+                    <div className="match-alert">
+                        <h3>{`You have matched with ${otherUser.name}!`}</h3>
+                        <IconButton color="primary"><CheckCircleIcon/></IconButton>
+                    </div>
                 </Backdrop>
                 :
                 <div className="profile-card" style={swiped ? {display:'none'} : {display: ''}}>
@@ -115,23 +112,22 @@ function ProfileCard({user, userId, loggedInUser, matchUpdate, setMatchUpdate, c
                         navButtonsProps={{style: {display: 'none'}}}
                         navButtonsWrapperProps={{style: {display: 'none'}}}
                     >
-                        {user.profile.photos.map((photo) => {
-                            return <img src={photo.image} />
+                        {otherUser.profile.photos.map((photo) => {
+                            return <img src={photo.image} alt={otherUser.name}/>
                         })}
                     </Carousel>
                     <div className="profile-info">
-                    <ul>
-                            <li><StraightenIcon fontSize="small" color="primary"/> <span>{user.profile.size}</span></li>
-                            <li><EmojiEmotionsIcon fontSize="small" color="primary"/> <span>{user.profile.personality}</span></li>
-                            <li><BungalowIcon fontSize="small" color="primary"/> <span>{user.profile.location}</span></li>
+                        <ul>
+                            <li><StraightenIcon fontSize="small" color="primary"/> <span>{otherUser.profile.size}</span></li>
+                            <li><EmojiEmotionsIcon fontSize="small" color="primary"/> <span>{otherUser.profile.personality}</span></li>
+                            <li><BungalowIcon fontSize="small" color="primary"/> <span>{otherUser.profile.location}</span></li>
                         </ul>
-                        <h1>{user.name}, {user.profile.age}</h1>
+                        <h1>{otherUser.name}, {otherUser.profile.age}</h1>
                         <p className="location"><LocationOnIcon fontSize="small" color="primary"/>{distance} miles away</p>
-                        
                         <hr/>
-                        <p className="bio">{user.profile.bio}</p>
+                        <p className="bio">{otherUser.profile.bio}</p>
                     </div>
-                    <SwipeButtons id={user.id} handleSwipe={handleSwipe}/>
+                    <SwipeButtons id={otherUser.id} handleSwipe={handleSwipe}/>
                 </div>
             }
         </ProfileCardStyle>
@@ -148,10 +144,6 @@ const ProfileCardStyle = styled.div`
         margin: auto;
         margin-bottom: 2em;
         width: 40%;
-    }
-
-    .profile-card:first-child {
-        z-index: 2;
     }
 
     .profile-info {
@@ -188,11 +180,10 @@ const ProfileCardStyle = styled.div`
 
     .match-alert {
         border: 1px solid grey;
-        width: 60%;
+        width: 30%;
         margin: auto;
         border-radius: 1em;
         background-color: white;
-        z-index: 10;
     }
 
     .match-alert h3 {
