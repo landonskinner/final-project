@@ -35,7 +35,7 @@ function App() {
         navigate('/')
       }
     });
-  }
+  };
 
   const getLocation = (userId) => {
     navigator.geolocation.getCurrentPosition((position) => {
