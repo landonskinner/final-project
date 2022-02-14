@@ -13,7 +13,7 @@ function NavBar({handleLogoutClick}) {
   return (
     <BottomNavigation>
         <BottomNavigationAction label="Home" onClick={() => navigate('/home')} icon={<HomeIcon color="primary"/>} />
-        <BottomNavigationAction label="Matches" onClick={() => navigate('/matches')} icon={<PetsIcon color="primary"/>} />
+        <BottomNavigationAction label="Matches" onClick={() => navigate('/match')} icon={<PetsIcon color="primary"/>} />
         <BottomNavigationAction label="Profile" onClick={() => navigate('/profile')} icon={<AccountCircleIcon color="primary"/>} />
         <BottomNavigationAction label="Logout" onClick={handleLogoutClick} icon={<ExitToAppIcon color="primary"/>} />
     </BottomNavigation>

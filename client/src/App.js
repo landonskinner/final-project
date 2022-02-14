@@ -80,7 +80,7 @@ function App() {
           element={<SwipeContainer user={user} />}
         />
         <Route 
-          path="/matches"
+          path="/match"
           element={<Matches user={user} />}
         />
         <Route 
