@@ -26,7 +26,7 @@ function SignUpForm({ onLogin, chatEngineAuth, getLocation }) {
     method: 'POST',
     headers: {
       "Content-Type": "application/json",
-      'PRIVATE-KEY': `{{${process.env.REACT_APP_CHAT_ENGINE_IO_KEY}}}`
+      'PRIVATE-KEY': `{{dc8ac88a-ee8a-4c29-b623-46c3305c4c1c}}`
     },
     body: JSON.stringify(chatAccountData)
   }
