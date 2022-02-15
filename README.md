@@ -10,7 +10,7 @@ When two users mutually like one another, a match is created. On the Match page,
 Lastly, the Profile page gives the user the ability to view and edit their profile card.
 
 ## Hosted Link
-The application is in the process of being deployed.
+Visit the deployed [site](https://unleashed-project.herokuapp.com/)! Or check out the [demo](https://www.youtube.com/watch?v=ja4nO0mtDH4)!
 
 ## Technologies Used
 * React v17
@@ -23,20 +23,3 @@ The application is in the process of being deployed.
 * Material UI
 * ChatEngine API
 * Navigator Web API 
-
-## Requirements to Run App Locally
-
-- Ruby 2.7.4
-- NodeJS (v16), and npm
-- Heroku CLI
-- Postgresql
-
-See Environment Setup below for instructions on installing these tools if you
-don't already have them.
-
-You can use the following commands to run the application:
-
-- `rails s`: run the backend on [http://localhost:3000](http://localhost:3000)
-- `npm start --prefix client`: run the frontend on
-  [http://localhost:4000](http://localhost:4000)
-
