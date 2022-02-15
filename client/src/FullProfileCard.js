@@ -55,7 +55,7 @@ const FullProfileCardStyle = styled.div`
 
     margin-top: 2em;
     margin-bottom: 1em;
-    
+    width: 100%;
 
     .profile-card {
         border: 2px solid grey;
