@@ -63,7 +63,7 @@ function MinProfileCard({match, user}) {
     return (
         <MinProfileCardStyle>
         {expandProfile ? 
-            <Backdrop className="full-profile" open={expandProfile} className={classes.backdrop}>
+            <Backdrop open={expandProfile} className={classes.backdrop}>
                 <FullProfileCard  user={matchProfile} />
                 <div className="button-container">
                 <IconButton 

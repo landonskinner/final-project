@@ -5,21 +5,7 @@ import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
 import BungalowIcon from '@mui/icons-material/Bungalow';
 import styled from 'styled-components'
 
-function FullProfileCard({user, setPhotoDelete}) {
-
-    const handlePhotoDelete = (e) => {
-        fetch(`/photos/${e.target.id}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: null
-        })
-        .then(resp => resp.json())
-        .then((data) => {
-            setPhotoDelete(true)
-        })
-    }
+function FullProfileCard({user}) {
     
     return (
         <FullProfileCardStyle>
