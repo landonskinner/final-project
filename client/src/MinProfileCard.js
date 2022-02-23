@@ -14,7 +14,8 @@ function MinProfileCard({match, user}) {
         backdrop: {
             zIndex: theme.zIndex.drawer + 1,
             display: 'flex',
-            flexDirection: 'column'
+            flexDirection: 'column',
+            width: '100%',
         }
     }))
     const classes = useStyles()
@@ -63,7 +64,7 @@ function MinProfileCard({match, user}) {
         <MinProfileCardStyle>
         {expandProfile ? 
             <Backdrop open={expandProfile} className={classes.backdrop}>
-                <FullProfileCard user={matchProfile} />
+                <FullProfileCard  user={matchProfile} />
                 <div className="button-container">
                 <IconButton 
                     type="button" 
