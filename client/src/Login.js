@@ -89,6 +89,12 @@ const LoginStyle = styled.div`
     top: 3.5em;
   }
 
+  @media screen and (max-width: 480px) {
+    .login:nth-child(2) {
+      width: 90%;
+    }
+  }
+
   h1 {
     color: #E68282;
     font-size: 2.5em;

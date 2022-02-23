@@ -130,4 +130,5 @@ const MinProfileCardStyle = styled.div`
         border-radius: 50px;
     }
 
+
 `

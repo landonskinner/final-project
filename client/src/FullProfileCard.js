@@ -55,7 +55,7 @@ const FullProfileCardStyle = styled.div`
 
     margin-top: 2em;
     margin-bottom: 1em;
-    
+    width: 100%;
 
     .profile-card {
         border: 2px solid grey;
@@ -63,6 +63,15 @@ const FullProfileCardStyle = styled.div`
         margin: auto;
         width: 50%;
         background-color: white;
+    }
+
+    @media screen and (max-width: 480px) {
+        .profile-card {
+            width: 90%;
+        }
+        img {
+            height: 90vw !important;
+        }
     }
 
     .profile-info {

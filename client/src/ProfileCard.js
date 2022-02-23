@@ -146,6 +146,12 @@ const ProfileCardStyle = styled.div`
         width: 40%;
     }
 
+    @media screen and (max-width: 480px) {
+        .profile-card {
+            width: 90%;
+        }
+    }
+
     .profile-info {
         text-align: left;
         width: 85%;
@@ -173,7 +179,6 @@ const ProfileCardStyle = styled.div`
     img {
         flex-shrink: 0;
         width: 100%;
-        height: 40vw;
         object-fit: cover;
         border-radius: 1em 1em 0 0 !important;
     }

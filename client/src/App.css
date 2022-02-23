@@ -379,7 +379,6 @@
 .app-header-login {
   display: inline-block;
   margin-bottom: 0.25em;
-  /* margin-top: -0.25em; */
   padding: 0 1em 0 1em;
   color: #E68282;
   background-color: white;
@@ -388,6 +387,12 @@
   font-family: 'Fredoka One', cursive;
   position: relative;
   top: 0.5em;
+}
+
+@media screen and (max-width: 480px) {
+  .app-header-login {
+    font-size: 3em;
+  }
 }
 
 .header-parent {

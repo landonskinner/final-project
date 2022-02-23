@@ -281,6 +281,21 @@ const ProfileFormStyle = styled.div`
     position: relative;
     top: 3.5em;
 
+    @media screen and (max-width: 480px) {
+        
+        top: 1em;
+        
+        .profile-edit:first-child {
+            width: 95% !important;
+        }
+        .form-separator {
+            display: block !important;
+        }
+        .form-separator > div {
+            width: 100% !important;
+        }
+    }
+
 
   form {
     margin: auto;
@@ -292,6 +307,10 @@ const ProfileFormStyle = styled.div`
   .form-separator {
     display: flex;
     justify-content: space-between;
+  }
+
+  .form-separator > div {
+      width: 25%;
   }
 
   .profile-edit:first-child {
