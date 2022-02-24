@@ -59,9 +59,49 @@
   border-radius: 2em 0 0 2em;
 }
 
+@media screen and (max-width: 575px) {
+  .ce-chat-list-column {
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+    border-radius: 2em 2em 0 0 ;
+  }
+  .ce-chats-container {
+    border-radius: 2em 2em 0 0 !important;
+  }
+  .ce-chat-list {
+    border-radius: 2em 2em 0 0 ;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;
+  }
+  .ce-chat-list::-webkit-scrollbar {
+    display: none;
+  }
+  .ce-chat-feed-column {
+    flex: 0 0 100% !important;
+    border-radius: 0 0 2em 2em !important;
+  }
+  .chat-feed {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;
+    border-radius: 0 0 2em 2em;
+  }
+  .chat-feed::-webkit-scrollbar {
+    display: none;
+  }
+  .message-form-container {
+    border-radius: 0 0 2em 2em;
+  }
+}
+
+@media screen and (min-width: 575px) {
+  .ce-chats-container {
+    border-radius: 2em 0 0 2em !important;
+  }
+}
+
 .ce-chats-container {
   background-color: rgb(240, 240, 240) !important;
-  border-radius: 2em 0 0 2em !important;
+  
 }
 
 .ce-active-chat-card {
@@ -145,6 +185,7 @@
   width: 100%;
   overflow: scroll;
   background-color: white;
+  /* display: none; */
 }
 
 .chat-title-container {
@@ -389,9 +430,19 @@
   top: 0.5em;
 }
 
+.chats-button {
+  display: none !important;
+}
+
 @media screen and (max-width: 480px) {
   .app-header-login {
     font-size: 3em;
+  }
+
+  .chats-button {
+    display: inline-flex !important;
+    float: left;
+    margin-bottom: 1em !important;
   }
 }
 
