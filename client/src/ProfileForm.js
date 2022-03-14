@@ -32,11 +32,10 @@ function ProfileForm({user, type, setUser, setEditClick, getLocation}) {
     }, [])
 
     const sizeOptions = ['Tiny', 'Small', 'Medium', 'Large', 'Huge']
-    const personalityOptions = ['Timid', 'Lazy', 'Calm', 'Outgoing', 'Indpendent']
+    const personalityOptions = ['Timid', 'Lazy', 'Calm', 'Outgoing', 'Independent']
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
-        console.log(formData)
     };
     
     const handleProfile = (e) => {
