@@ -9,7 +9,7 @@ class UsersController < ApplicationController
 
     def show
         user = User.find(params[:id])
-        render json: user, include: ['profile', 'profile.photos']
+        render json: user, include: ['profile', 'profile.photos', 'preference']
     end
 
     def create
@@ -25,7 +25,7 @@ class UsersController < ApplicationController
     end
 
     def me
-        render json: @current_user, include: ['profile', 'profile.photos']
+        render json: @current_user, include: ['profile', 'profile.photos', 'preference']
     end
 
     private

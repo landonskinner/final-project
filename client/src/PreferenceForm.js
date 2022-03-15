@@ -23,6 +23,33 @@ function PreferenceForm({user, setPreferenceClick}) {
         console.log(formData)
     };
 
+    const preferenceFetch = (obj, type, id = '') => {
+        fetch(`/preferences/${id}`, {
+            method: type,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({...obj, id: user.id})
+        })
+        .then(resp => resp.json())
+        .then(console.log)
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (!user.preference) {
+            preferenceFetch(formData, 'POST')
+        } else {
+            preferenceFetch(formData, 'PATCH', user.preference.id)
+        }
+        setPreferenceClick(false)
+    }
+    // next steps: 
+        // auto populate form with existing preferences
+        // add ability to clear preferences
+        // filter users based on preferences
+
+
     const sizeOptions = ['Tiny', 'Small', 'Medium', 'Large', 'Huge']
     const personalityOptions = ['Timid', 'Lazy', 'Calm', 'Outgoing', 'Independent']
   
@@ -33,7 +60,7 @@ function PreferenceForm({user, setPreferenceClick}) {
                 <IconButton type="button" className="cancel-button" size="large">
                     <CancelIcon onClick={() => setPreferenceClick(false)}/>
                 </IconButton>
-                <form onSubmit={(e) => console.log(e)}>
+                <form onSubmit={(e) => handleSubmit(e)}>
                 <TextField
                     label="Max Distance (miles)"
                     type="number"
@@ -97,7 +124,7 @@ const ProfileFormStyle = styled.div`
 
     position: relative;
     top: 3.5em;
-    width: 80%;
+    width: 60%;
     margin: auto;
 
   form {
@@ -114,8 +141,7 @@ const ProfileFormStyle = styled.div`
 
   form > button {
       display: block;
-      margin-left: auto;
-      margin-right: auto;
+      margin: 1em auto 1.5em auto;
   }
 
   .form-separator {

@@ -33,22 +33,15 @@ function ProfilePage({ user, setUser }) {
             variant="contained"
             onClick={() => setPreferenceClick(true)}
           >
-            Set Preferences
+            Edit Preferences
           </Button>
           <FullProfileCard user={user} />
         </ButtonStyle>
       ) : null}
       {preferenceClick ? (
         <PreferenceForm user={user} setPreferenceClick={setPreferenceClick}/>
-      ) : (
-        <Button
-          type="button"
-          variant="contained"
-          onClick={() => setPreferenceClick(true)}
-        >
-          Set Preferences
-        </Button>
-      )}
+      ) : null
+      }
     </div>
   );
 }

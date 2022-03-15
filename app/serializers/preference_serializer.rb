@@ -1,3 +1,5 @@
 class PreferenceSerializer < ActiveModel::Serializer
-  attributes :id, :user, :size, :distance, :personality
+  attributes :id, :size, :distance, :personality
+
+  belongs_to :user
 end

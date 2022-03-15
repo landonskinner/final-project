@@ -4,4 +4,5 @@ class UserSerializer < ActiveModel::Serializer
   has_many :likeds
   has_many :likers
   has_one :profile
+  has_one :preference
 end
