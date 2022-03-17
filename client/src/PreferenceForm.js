@@ -32,7 +32,7 @@ function PreferenceForm({user, setPreferenceClick}) {
             body: JSON.stringify({...obj, id: user.id})
         })
         .then(resp => resp.json())
-        .then(console.log)
+        .then(data => console.log(data))
     }
 
     const handleSubmit = (e) => {
