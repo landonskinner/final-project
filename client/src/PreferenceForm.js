@@ -12,9 +12,9 @@ function PreferenceForm({user, setPreferenceClick}) {
   
     const [formData, setFormData] = useState({
         "user_id": user.id,
-        size: '',
-        distance: '',
-        personality: ''
+        size: user.preference?.size || '',
+        distance: user.preference?.distance || '',
+        personality: user.preference?.personality || ''
     })
     const [errors, setErrors] = useState([]);
 
@@ -33,6 +33,7 @@ function PreferenceForm({user, setPreferenceClick}) {
         })
         .then(resp => resp.json())
         .then(data => console.log(data))
+        .catch(errors => setErrors(errors))
     }
 
     const handleSubmit = (e) => {
@@ -44,10 +45,18 @@ function PreferenceForm({user, setPreferenceClick}) {
         }
         setPreferenceClick(false)
     }
+
+    const handleClear = () => {
+        const clearForm = {
+            size: '',
+            personality: '',
+            distance: ''
+        }
+        preferenceFetch(clearForm, 'PATCH', user.preference.id)
+        setPreferenceClick(false)
+    }
     // next steps: 
-        // auto populate form with existing preferences
-        // add ability to clear preferences
-        // filter users based on preferences
+        // incorporate distance in filtering criteria
 
 
     const sizeOptions = ['Tiny', 'Small', 'Medium', 'Large', 'Huge']
@@ -108,6 +117,10 @@ function PreferenceForm({user, setPreferenceClick}) {
                 {errors.map((err) => (
                     <Alert severity="error" key={err}>{err}</Alert>
                 ))}
+                <br />
+                <Button type="button" variant="outlined" color="primary" onClick={handleClear}>
+                    Clear Preferences
+                </Button>
                 <Button type="submit" variant="contained" color="primary">
                     Edit Preferences
                 </Button>
@@ -140,8 +153,8 @@ const ProfileFormStyle = styled.div`
   }
 
   form > button {
-      display: block;
-      margin: 1em auto 1.5em auto;
+      display: inline-block;
+      margin: 1em;
   }
 
   .form-separator {
@@ -161,10 +174,6 @@ const ProfileFormStyle = styled.div`
   .cancel-button {
     float: right;
     margin: 0.15em;
-  }
-
-  .button-holder {
-    text-align: center;
   }
 
   .location-alert {

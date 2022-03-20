@@ -1,11 +1,9 @@
 class UsersController < ApplicationController
     skip_before_action :authorize, only: [:create]
 
-    # const sizeOptions = ['Tiny', 'Small', 'Medium', 'Large', 'Huge']
-    # const personalityOptions = ['Timid', 'Lazy', 'Calm', 'Outgoing', 'Independent']
-
     def index
         seen_users = @current_user.likers.map { |liker| liker.liked_id }
+        # if respective preference exists, assign to variable
         if (@current_user.preference && @current_user.preference.size != "")
             size = @current_user.preference.size
         end
@@ -15,6 +13,7 @@ class UsersController < ApplicationController
         if (@current_user.preference && @current_user.preference.distance != nil)
             distance = @current_user.preference.distance
         end
+        # if preference exists, filter profiles based on preference
         filter_users = Profile.where(size: size || ['Tiny', 'Small', 'Medium', 'Large', 'Huge'])
                             .where(personality: personality || ['Timid', 'Lazy', 'Calm', 'Outgoing', 'Independent'])
                             .map { |profile| profile.user_id}
