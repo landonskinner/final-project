@@ -44,6 +44,7 @@ function PreferenceForm({user, setPreferenceClick}) {
             preferenceFetch(formData, 'PATCH', user.preference.id)
         }
         setPreferenceClick(false)
+        window.location.reload()
     }
 
     const handleClear = () => {
@@ -54,10 +55,8 @@ function PreferenceForm({user, setPreferenceClick}) {
         }
         preferenceFetch(clearForm, 'PATCH', user.preference.id)
         setPreferenceClick(false)
+        window.location.reload()
     }
-    // next steps: 
-        // incorporate distance in filtering criteria
-
 
     const sizeOptions = ['Tiny', 'Small', 'Medium', 'Large', 'Huge']
     const personalityOptions = ['Timid', 'Lazy', 'Calm', 'Outgoing', 'Independent']

@@ -13,7 +13,7 @@ import Backdrop from '@mui/material/Backdrop';
 import { makeStyles } from "@mui/styles";
 import styled from 'styled-components'
 
-function ProfileCard({otherUser, user}) {
+function ProfileCard({otherUser, user, lastIdx, setFinished}) {
     
     const useStyles = makeStyles((theme) => ({
         backdrop: {
@@ -89,14 +89,18 @@ function ProfileCard({otherUser, user}) {
             }
             setSwiped(true)
         })
+
+        if (otherUser.id === lastIdx) setFinished(true)
     }
 
     const handleClose = () => {
         setMatched(false)
     }
 
+    let distancePref = user.preference.distance || Number.MAX_SAFE_INTEGER
+
     return (
-        <ProfileCardStyle className="full-card">
+        <ProfileCardStyle className="full-card" style={ distance <= distancePref ? {display: 'inherit'} : {display: 'none'}}>
             {matched ?
                 <Backdrop onClick={handleClose} open={matched} className={classes.backdrop}>
                     <div className="match-alert">

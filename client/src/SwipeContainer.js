@@ -5,12 +5,13 @@ import CircularProgress from '@mui/material/CircularProgress';
 function SwipeContainer({user}) {
 
     const [userStack, setUserStack] = useState('')
+    const [finished, setFinished] = useState(false)
 
     useEffect(() => {
         fetch('/users')
         .then(resp => resp.json())
         .then(users => setUserStack(users))
-    }, [user])
+    }, [user, finished])
 
     const renderUserStack = () => {
         if (!userStack) {
@@ -34,9 +35,11 @@ function SwipeContainer({user}) {
                         You've seen all users! Try updating your preferences for more.
                     </div>
         } else {
-            return userStack.map((otherUser) => <ProfileCard key={user.id} user={user} otherUser={otherUser} />)
+            return userStack.map((otherUser) => <ProfileCard key={user.id} user={user} otherUser={otherUser} lastIdx={lastIdx} setFinished={setFinished}/>)
         }
     }
+
+    const lastIdx = userStack[userStack.length - 1]?.id
     
     return (
             <div className="user-stack">

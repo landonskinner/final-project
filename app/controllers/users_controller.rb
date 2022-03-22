@@ -10,14 +10,13 @@ class UsersController < ApplicationController
         if (@current_user.preference && @current_user.preference.personality != "")
             personality = @current_user.preference.personality
         end
-        if (@current_user.preference && @current_user.preference.distance != nil)
-            distance = @current_user.preference.distance
-        end
+        # if (@current_user.preference && @current_user.preference.distance != nil)
+        #     distance = @current_user.preference.distance
+        # end
         # if preference exists, filter profiles based on preference
         filter_users = Profile.where(size: size || ['Tiny', 'Small', 'Medium', 'Large', 'Huge'])
                             .where(personality: personality || ['Timid', 'Lazy', 'Calm', 'Outgoing', 'Independent'])
                             .map { |profile| profile.user_id}
-        # byebug
         render_users = User.where.not(id: seen_users).where.not(id: @current_user.id).where(id: filter_users)
         render json: render_users, include: ['profile', 'profile.photos']
     end
